@@ -1,2 +1,2 @@
 # 3js.planner
-cube--Cube
+cube--Cube 3d
