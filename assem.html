@@ -1,0 +1,63 @@
+<!DOCTYPE HTML>
+<html lang = "en">
+	<head>
+		<meta charset = "UTF-8" />
+		<meta name = "viewport" content="width=device-width, initial-scale=1" />
+		<title>Lighting shapes in three_js</title>
+		<style>
+			@import url("../../MILSON_CANVAS ALL PAGES.css");
+		</style>
+	</head>
+	<body>
+		<div class = "container">
+			<h3><a href = "" target = "_blanck">The source code</a> <b>|</b> <a href = "" target = "_blanck">a[0] --> z++</a></h3>
+		</div>
+		<script src="../build/three.js"></script>
+		<script>
+			window.onload = main;
+			var scene, camera, renderer, interval;
+			let CUBE;
+			class shapes{
+				constructor({p1 = 0,p2 = 0,p3 = 0,p4 = 0}, x, y, z, f, color){
+					this.x = x;
+					this.y = y;
+					this.z = z;
+					this.p1 = p1;
+					this.p2 = p2;
+					this.p3 = p3;
+					this.p4 = p4;
+					this.f = f;
+					this.color = color;
+					this.geometry = new this.f(this.p1, this.p2, this.p3, this.p4);
+					this.material = new THREE.MeshBasicMaterial({color: this.color});
+					this.cube = new THREE.Mesh(this.geometry, this.material);
+					this.cube.position.set(this.x, this.y, this.z);
+					this.cube.castShadow = true;
+					this.cube.receiveShadow = true;
+					scene.add(this.cube);
+				}
+				animation(rx, ry, rz){
+					this.cube.rotation.x += rx;
+					this.cube.rotation.y += ry;
+					this.cube.rotation.z += rz;
+				}
+			};
+				function draw(){
+					renderer.render(scene, camera);
+					CUBE.animation(0, 0,0 );  
+				}
+				function main(){
+					scene = new THREE.Scene();
+					renderer = new THREE.WebGLRenderer({ antialias: true});
+					renderer.setSize(window.innerWidth, window.innerHeight);
+					renderer.setClearColor(0x66ccff, 1);
+					document.body.appendChild(renderer.domElement);
+					CUBE = new shapes({p1: 150,p2: 150,p3: 150},10, 0, 0, THREE.CubeGeometry, 0xffcc00);
+					camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 4000);
+					camera.position.set(-150, 0, 300);
+					scene.add(camera);
+					interval = setInterval(draw, 10);
+				}
+		</script>
+	</body>
+</html>
