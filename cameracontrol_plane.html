@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style>
+		@import url("../../MILSON_CANVAS ALL PAGES.css");
+	</style>
+</head>
+<body>
+	<script src = "../build/three.js"></script>
+	<script src = "js/controls/OrbitControls.js"></script>
+	<script>
+		window.onload = main;
+		var scene, camera, cameraControls, renderer, interval;
+		let plane, CUBE;
+		class shapes{
+			constructor({p1 = 0,p2 = 0,p3 = 0,p4 = 0}, x, y, z, f, m, color){
+				this.p1 = p1;
+				this.p2 = p2;
+				this.p3 = p3;
+				this.p4 = p4;
+				this.f = f;
+				this.x = x;
+				this.y = y;
+				this.z = z;
+				this.m = m;
+				this.color = color;
+				this.geometry = new this.f(this.p1, this.p2, this.p3, this.p4);
+				this.material = new this.m({color: this.color});
+				this.cube = new THREE.Mesh(this.geometry, this.material);
+				this.cube.position.set(this.x, this.y, this.z);
+				this.cube.castShadow = true;
+				this.cube.receiveShadow = true;
+				scene.add(this.cube);
+			}
+		};
+		function draw(){
+			renderer.render(scene, camera);
+		}
+		function main(){
+			scene = new THREE.Scene();
+			renderer = new THREE.WebGLRenderer({ antialias: true});
+			renderer.setSize(window.innerWidth, window.innerHeight);
+			renderer.setClearColor(0x66ccff, 1);
+			document.body.appendChild(renderer.domElement);
+			plane = new shapes({p1: 1000, p2:1000}, 0, 0, 0, THREE.PlaneBufferGeometry, THREE.MeshBasicMaterial, 0x0000ff);
+			plane.cube.rotation.x = -Math.PI / 2;
+			camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 4000);
+			camera.position.set(-150, 0, 300);
+			scene.add(camera);
+			cameraControls = new THREE.OrbitControls(camera, renderer.domElement);
+			cameraControls.target.set(-25, -50, 10);
+			cameraControls.update();
+			interval = setInterval(draw, 10);
+		}
+	</script>
+</body>
+</html>
