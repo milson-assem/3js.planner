@@ -1,0 +1,73 @@
+<!DOCTYPE HTML>
+<html lang = "en">
+	<head>
+		<meta charset = "UTF-8" />
+		<meta name = "viewport" content="width=device-width, initial-scale=1" />
+		<title>Lighting shapes in three_js</title>
+		<style>
+			@import url("../../MILSON_CANVAS ALL PAGES.css");
+		</style>
+	</head>
+	<body>
+		<div class = "container">
+			<h3><a href = "" target = "_blanck">The source code</a> <b>|</b> <a href = "" target = "_blanck">a[0] --> z++</a></h3>
+		</div>
+		<script src="../build/three.js"></script>
+		<script src = "js/controls/OrbitControls.js"></script>
+		<script>
+			window.onload = main;
+			var renderer, scene, camera, cameraControls, light, interval, i;
+			var number_of_cube = 300;
+			let CUBE = [];
+			class shapes {
+				constructor({p1 = 0, p2 = 0, p3 = 0, p4 = 0}, x, y, z, f, color){
+					this.p1 = p1;
+					this.p2 = p2;
+					this.p3 = p3;
+					this.p4 = p4;
+					this.x = x;
+					this.y = y;
+					this.z = z;
+					this.f = f;
+					this.color = color;
+					this.geometry = new this.f(this.p1, this.p2, this.p3, this.p4);
+					this.material = new THREE.MeshStandardMaterial({color: this.color});
+					this.cube = new THREE.Mesh(this.geometry, this.material);
+					this.cube.position.set(this.x, this.y, this.z);
+					this.cube.castShadow = true;
+					this.cube.receiveShadow = true;
+					scene.add(this.cube);
+				}
+			};
+			function draw(){
+				renderer.render(scene, camera);
+			}
+			function main(){
+				scene = new THREE.Scene();
+				renderer = new THREE.WebGLRenderer({ antialias: true});
+				renderer.setSize(window.innerWidth, window.innerHeight);
+				renderer.setClearColor(0x66ccff, 1);
+				document.body.appendChild(renderer.domElement);
+				for(i = 0; i < number_of_cube; i++) {
+					CUBE[i] = new shapes (
+						{p1: 50, p2: 50, p3: 50},
+						Math.floor(Math.random() * 800) - 400,
+						Math.floor(Math.random() * 800) - 400,
+						Math.floor(Math.random() * 800) - 400,
+						THREE.CubeGeometry,
+						new THREE.Color("rgb(100, 50, 0)")
+					);
+				}
+				camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 4000);
+				scene.add(camera);
+				cameraControls = new THREE.OrbitControls(camera, renderer.domElement);
+				cameraControls.target.set(-25, -50, 10);
+				cameraControls.update();
+				light = new THREE.DirectionalLight(0xffffff, 3);
+				light.position.set(1, 1, 1).normalize();
+				scene.add(light);
+				interval = setInterval(draw, 10);
+			}
+		</script>
+	</body>
+</html>
